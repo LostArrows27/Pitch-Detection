@@ -12,11 +12,7 @@ function setup() {
   mic = new p5.AudioIn();
   console.log(mic);
   micElement.onclick = (e) => {
-    if (mic.enabled) {
-      mic.stop();
-    } else {
-      mic.start(startPitch);
-    }
+    mic.start(startPitch);
   };
 }
 
@@ -25,7 +21,9 @@ function startPitch() {
 }
 
 function modelLoaded() {
-  console.log("done loading model!");
+  document.querySelector("#off").onclick = (e) => {
+    mic.stop();
+  };
   getPitch();
 }
 
@@ -34,7 +32,7 @@ function getPitch() {
     if (err) {
       throw new Error("smth happened!");
     }
-    if(frequency) {
+    if (frequency) {
       console.log(frequency);
     }
     getPitch();
