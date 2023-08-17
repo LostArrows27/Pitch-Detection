@@ -7,12 +7,16 @@ let micElement = document.querySelector("#mic");
 
 // set up when first time enter page
 function setup() {
-  console.log("set up");
   audioContext = getAudioContext();
-  mic = new p5.AudioIn();
-  console.log(mic);
-  micElement.onclick = (e) => {
-    mic.start(startPitch);
+  mic = new p5.AudioIn(notSupportedBrower);
+
+  micElement.onclick = async (e) => {
+    mic.start(startPitch); // start your microphone
+    // mic.connect(); // listen to your voice directly with a bit delay
+    const microphoneArr = await getAllMicSources();
+    microphoneArr.forEach((device) => {
+      console.log(device.label);
+    });
   };
 }
 
@@ -21,8 +25,10 @@ function startPitch() {
 }
 
 function modelLoaded() {
+  console.log("model loaded");
   document.querySelector("#off").onclick = (e) => {
     mic.stop();
+    // mic.disconnect();
   };
   getPitch();
 }
@@ -37,4 +43,12 @@ function getPitch() {
     }
     getPitch();
   });
+}
+
+function notSupportedBrower() {
+  throw new Error("not supported !");
+}
+
+async function getAllMicSources() {
+  return mic.getSources();
 }
